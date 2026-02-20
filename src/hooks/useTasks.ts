@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+
 import type { Task } from '../types'
 
 const STORAGE_KEY = 'my-kanban-tasks'
@@ -28,7 +30,7 @@ export function useTasks() {
     const tasksInColumn = tasks.filter(t => t.columnId === columnId)
 
     const newTask: Task = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       columnId: columnId,
       order: tasksInColumn.length,
       title: title,
