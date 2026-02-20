@@ -56,33 +56,33 @@ export function useTasks() {
     })
   }
 
-  // const moveTask = (
-  // id: string,
-  // newColumnId: string,
-  // newOrder: number
-  // ) => {
-  //   setTasks(prev => {
-  //     const task = prev.find(t => t.id === id)
-  //     if (!task) return prev
-  //     if (task.columnId === newColumnId && task.order === newOrder) return prev
+  const moveTask = (
+    id: string,
+    newColumnId: string,
+    newOrder: number
+  ) => {
+    setTasks(prev => {
+      const task = prev.find(t => t.id === id)
+      if (!task) return prev
+      if (task.columnId === newColumnId && task.order === newOrder) return prev
 
-  //     let updatedTasks = prev.map(t =>
-  //       t.id === id ? { ...t, state: newState, order: newOrder } : t
-  //     )
+      let updatedTasks = prev.map(t =>
+        t.id === id ? { ...t, columnId: newColumnId, order: newOrder } : t
+      )
 
-  //     // normalized old column
-  //     updatedTasks = normalizeOrder(updatedTasks, task.columnId)
+      // normalize old column
+      updatedTasks = normalizeOrder(updatedTasks, task.columnId)
 
-  //     if (task.state !== newState) {
-  //       // normalized new column
-  //       updatedTasks = normalizeOrder(updatedTasks, newState)
-  //     }
+      if (task.columnId !== newColumnId) {
+        // normalize new column
+        updatedTasks = normalizeOrder(updatedTasks, newColumnId)
+      }
 
-  //     return updatedTasks
-  //   })
-  // }
+      return updatedTasks
+    })
+  }
 
-  return { tasks, addTask, updateTask, deleteTask }
+  return { tasks, addTask, updateTask, deleteTask, moveTask }
 }
 
 function normalizeOrder(tasks: Task[], columnId: string): Task[] {
