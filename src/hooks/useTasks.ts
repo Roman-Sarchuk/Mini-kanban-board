@@ -33,18 +33,34 @@ export function useTasks() {
       id: uuidv4(),
       columnId: columnId,
       order: tasksInColumn.length,
-      title: title,
+      title,
     }
 
     setTasks(prev => [...prev, newTask])
   }
 
   const updateTask = (id: string, updates: Partial<Omit<Task, 'id'>>) => {
-    setTasks(prev =>
-      prev.map(task =>
+    setTasks(prev => {
+      const existingTask = prev.find(task => task.id === id)
+      if (!existingTask) return prev
+
+      const updatedTasks = prev.map(task =>
         task.id === id ? { ...task, ...updates } : task
       )
-    )
+
+      const updatedTask = updatedTasks.find(task => task.id === id)
+      if (!updatedTask) return prev
+
+      // Always normalize the original column
+      let normalized = normalizeOrder(updatedTasks, existingTask.columnId)
+
+      // If the task moved to a different column, normalize the new column as well
+      if (updatedTask.columnId !== existingTask.columnId) {
+        normalized = normalizeOrder(normalized, updatedTask.columnId)
+      }
+
+      return normalized
+    })
   }
 
   const deleteTask = (id: string) => {
@@ -58,33 +74,33 @@ export function useTasks() {
     })
   }
 
-  // const moveTask = (
-  // id: string,
-  // newColumnId: string,
-  // newOrder: number
-  // ) => {
-  //   setTasks(prev => {
-  //     const task = prev.find(t => t.id === id)
-  //     if (!task) return prev
-  //     if (task.columnId === newColumnId && task.order === newOrder) return prev
+  const moveTask = (
+    id: string,
+    newColumnId: string,
+    newOrder: number
+  ) => {
+    setTasks(prev => {
+      const task = prev.find(t => t.id === id)
+      if (!task) return prev
+      if (task.columnId === newColumnId && task.order === newOrder) return prev
 
-  //     let updatedTasks = prev.map(t =>
-  //       t.id === id ? { ...t, state: newState, order: newOrder } : t
-  //     )
+      let updatedTasks = prev.map(t =>
+        t.id === id ? { ...t, columnId: newColumnId, order: newOrder } : t
+      )
 
-  //     // normalized old column
-  //     updatedTasks = normalizeOrder(updatedTasks, task.columnId)
+      // normalize old column
+      updatedTasks = normalizeOrder(updatedTasks, task.columnId)
 
-  //     if (task.state !== newState) {
-  //       // normalized new column
-  //       updatedTasks = normalizeOrder(updatedTasks, newState)
-  //     }
+      if (task.columnId !== newColumnId) {
+        // normalize new column
+        updatedTasks = normalizeOrder(updatedTasks, newColumnId)
+      }
 
-  //     return updatedTasks
-  //   })
-  // }
+      return updatedTasks
+    })
+  }
 
-  return { tasks, addTask, updateTask, deleteTask }
+  return { tasks, addTask, updateTask, deleteTask, moveTask }
 }
 
 function normalizeOrder(tasks: Task[], columnId: string): Task[] {
