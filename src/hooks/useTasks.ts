@@ -38,11 +38,27 @@ export function useTasks() {
   }
 
   const updateTask = (id: string, updates: Partial<Omit<Task, 'id'>>) => {
-    setTasks(prev =>
-      prev.map(task =>
+    setTasks(prev => {
+      const existingTask = prev.find(task => task.id === id)
+      if (!existingTask) return prev
+
+      const updatedTasks = prev.map(task =>
         task.id === id ? { ...task, ...updates } : task
       )
-    )
+
+      const updatedTask = updatedTasks.find(task => task.id === id)
+      if (!updatedTask) return prev
+
+      // Always normalize the original column
+      let normalized = normalizeOrder(updatedTasks, existingTask.columnId)
+
+      // If the task moved to a different column, normalize the new column as well
+      if (updatedTask.columnId !== existingTask.columnId) {
+        normalized = normalizeOrder(normalized, updatedTask.columnId)
+      }
+
+      return normalized
+    })
   }
 
   const deleteTask = (id: string) => {
