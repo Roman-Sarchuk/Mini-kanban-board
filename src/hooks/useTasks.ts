@@ -29,9 +29,9 @@ export function useTasks() {
 
     const newTask: Task = {
       id: crypto.randomUUID(),
-      columnId: columnId,
+      columnId,
       order: tasksInColumn.length,
-      title: title,
+      title,
     }
 
     setTasks(prev => [...prev, newTask])
