@@ -63,32 +63,30 @@ export function useColumns() {
     })
   }
 
-  const moveColumn = (
-    id: string,
-    newOrder: number
-  ) => {
-    setColumns(prev => {
-      const column = prev.find(c => c.id === id)
-      if (!column) return prev
-      if (column.order === newOrder) return prev
+  const moveColumn = (id: string, newIndex: number) => {
+  setColumns(prev => {
+    const currentIndex = prev.findIndex(c => c.id === id)
+    if (currentIndex === -1) return prev
 
-      let updatedColumns = prev.map(c =>
-        c.id === id ? { ...c, order: newOrder } : c
-      )
+    const updated = [...prev]
+    const [moved] = updated.splice(currentIndex, 1)
+    updated.splice(newIndex, 0, moved)
 
-      return normalizeOrder(updatedColumns)
-    })
-  }
+    return updated.map((col, index) => ({
+      ...col,
+      order: index,
+    }))
+  })
+}
 
   return { columns, addColumn, updateColumn, deleteColumn, moveColumn }
 }
 
 function normalizeOrder(columns: Column[]): Column[] {
-  const sortedColumns = columns.sort((a, b) => a.order - b.order)
+  const sortedColumns = [...columns].sort((a, b) => a.order - b.order)
 
-  return columns.map(column => {
-    const index = sortedColumns.findIndex(c => c.id === column.id)
-
-    return { ...column, order: index }
-  })
+  return sortedColumns.map((column, index) => ({
+    ...column,
+    order: index,
+  }))
 }
