@@ -47,9 +47,6 @@ export function useColumns() {
         column.id === id ? { ...column, ...updates } : column
       )
 
-      const updatedColumn = updatedColumns.find(column => column.id === id)
-      if (!updatedColumn) return prev
-
       return normalizeOrder(updatedColumns)
     })
   }
