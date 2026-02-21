@@ -1,16 +1,38 @@
-import type { Task } from "../../types";
+import type { Task, Column as ColumnType } from "../../types";
+import InlineAddField from "../InlineAddField/InlineAddField";
 
 interface ColumnProps {
-  title: string;
+  columnData: ColumnType;
   tasks: Task[];
+  onAddTask: (columnId: string, title: string) => void;
 }
 
-function Column({ title, tasks }: ColumnProps) {
-
+function Column({ columnData, tasks, onAddTask }: ColumnProps) {
+  const columnTasks = tasks.filter((t) => t.columnId === columnData.id);
 
   return (
-    <div className="column">
-      <h2>{title}</h2>
+    <div
+      style={{
+        backgroundColor: "#ebecf0",
+        borderRadius: "3px",
+        width: "350px",
+        height: "500px",
+        padding: "8px",
+        marginRight: "16px",
+      }}
+    >
+      {/* title */}
+      <h4>{columnData.title}</h4>
+      {/* tasks container */}
+      <div>
+        {columnTasks.map((task) => (
+          <div key={task.id}>{task.title}</div>
+        ))}
+        <InlineAddField
+          title="Enter task title"
+          onAdd={(title) => onAddTask(columnData.id, title)}
+        />
+      </div>
     </div>
   );
 }
