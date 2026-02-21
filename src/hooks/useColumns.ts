@@ -66,20 +66,20 @@ export function useColumns() {
   }
 
   const moveColumn = (id: string, newIndex: number) => {
-  setColumns(prev => {
-    const currentIndex = prev.findIndex(c => c.id === id)
-    if (currentIndex === -1) return prev
+    setColumns(prev => {
+      const currentIndex = prev.findIndex(c => c.id === id)
+      if (currentIndex === -1) return prev
 
-    const updated = [...prev]
-    const [moved] = updated.splice(currentIndex, 1)
-    updated.splice(newIndex, 0, moved)
+      const updated = [...prev]
+      const [moved] = updated.splice(currentIndex, 1)
+      updated.splice(newIndex, 0, moved)
 
-    return updated.map((col, index) => ({
-      ...col,
-      order: index,
-    }))
-  })
-}
+      return updated.map((col, index) => ({
+        ...col,
+        order: index,
+      }))
+    })
+  }
 
   return { columns, addColumn, updateColumn, deleteColumn, moveColumn }
 }
