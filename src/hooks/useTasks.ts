@@ -39,7 +39,7 @@ export function useTasks() {
     setTasks(prev => [...prev, newTask])
   }
 
-  const updateTask = (id: string, updates: Partial<Omit<Task, 'id'>>) => {
+  const updateTask = (id: string, updates: Partial<Omit<Task, 'id' | 'order'>>) => {
     setTasks(prev => {
       const existingTask = prev.find(task => task.id === id)
       if (!existingTask) return prev
