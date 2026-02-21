@@ -1,9 +1,18 @@
-function Column() {
-    return (
-        <div>
-            column
-        </div>
-    )
+import type { Task } from "../../types";
+
+interface ColumnProps {
+  title: string;
+  tasks: Task[];
 }
 
-export default Column
+function Column({ title, tasks }: ColumnProps) {
+
+
+  return (
+    <div className="column">
+      <h2>{title}</h2>
+    </div>
+  );
+}
+
+export default Column;
