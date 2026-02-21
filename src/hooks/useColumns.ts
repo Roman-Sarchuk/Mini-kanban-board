@@ -17,9 +17,9 @@ export function useColumns() {
     }
   })
   
-  // For dev only: clear tasks in local storage on every reload
+  // For dev only: clear columns in local storage on every reload
   // useEffect(() => {
-  //   setTasks([]);
+  //   setColumns([]);
   // }, [])
 
   useEffect(() => {
