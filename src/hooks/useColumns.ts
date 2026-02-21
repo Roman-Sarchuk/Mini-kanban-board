@@ -27,13 +27,15 @@ export function useColumns() {
   }, [columns])
 
   const addColumn = (title: string) => {
-    const newColumn: Column = {
-      id: uuidv4(),
-      order: columns.length,
-      title,
-    }
+    setColumns(prev => {
+      const newColumn: Column = {
+        id: uuidv4(),
+        order: prev.length,
+        title,
+      }
 
-    setColumns(prev => [...prev, newColumn])
+      return [...prev, newColumn]
+    })
   }
 
   const updateColumn = (id: string, updates: Partial<Omit<Column, 'id'>>) => {
