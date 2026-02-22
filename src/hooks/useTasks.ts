@@ -63,10 +63,10 @@ export function useTasks() {
 
   const moveTask = (activeId: string, overId: string, newColumnId: string) => {
     setTasks((prev) => {
-      const currentIndex = prev.findIndex((c) => c.id === activeId);
+      const currentIndex = prev.findIndex((t) => t.id === activeId);
       if (currentIndex === -1) return prev;
 
-      const overIndex = prev.findIndex((c) => c.id === overId);
+      const overIndex = prev.findIndex((t) => t.id === overId);
       if (overIndex === -1) return prev;
 
       const updated = [...prev];
