@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 import type { Task, Column as ColumnType } from "../../types";
-import AddField from "../InlineAddField/AddField";
+import AddField from "../AddField/AddField";
 import TrashIcon from "../../icons/TrashIcon";
 import Card from "../Card/Card";
 

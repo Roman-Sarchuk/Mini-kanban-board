@@ -8,7 +8,7 @@ import { SortableContext } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 
-import InlineAddField from "../../components/InlineAddField/AddField";
+import AddField from "../../components/AddField/AddField";
 import Column from "../../components/Column/Column";
 import { useColumns } from "../../hooks/useColumns";
 import { useTasks } from "../../hooks/useTasks";
@@ -101,7 +101,7 @@ function Kanban() {
               />
             ))}
           </SortableContext>
-          <InlineAddField title="Enter column title" onAdd={addColumn} />
+          <AddField title="Enter column title" onAdd={addColumn} />
         </div>
 
         {createPortal(
