@@ -4,15 +4,18 @@ import { CSS } from "@dnd-kit/utilities";
 import type { Task, Column as ColumnType } from "../../types";
 import InlineAddField from "../InlineAddField/InlineAddField";
 import TrashIcon from "../../icons/TrashIcon";
+import Card from "../Card/Card";
 
 interface ColumnProps {
   columnData: ColumnType;
   columnTasks: Task[];
   onDeleteColumn: (columnId: string) => void;
   onAddTask: (columnId: string, title: string) => void;
+  onDeleteTask: (taskId: string) => void;
+  onUpdateTask: (taskId: string, taskUpdates: Task) => void;
 }
 
-function Column({ columnData, columnTasks, onDeleteColumn, onAddTask }: ColumnProps) {
+function Column({ columnData, columnTasks, onDeleteColumn, onAddTask, onDeleteTask, onUpdateTask }: ColumnProps) {
   const {
     setNodeRef,
     attributes,
@@ -98,7 +101,7 @@ function Column({ columnData, columnTasks, onDeleteColumn, onAddTask }: ColumnPr
         }}
       >
         {columnTasks.map((task) => (
-          <div key={task.id}>{task.title}</div>
+          <Card key={task.id} task={task} onDelete={onDeleteTask} onUpdate={onUpdateTask} />
         ))}
       </div>
 

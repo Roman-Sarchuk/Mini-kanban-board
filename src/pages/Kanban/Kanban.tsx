@@ -96,6 +96,8 @@ function Kanban() {
                 columnTasks={tasksByColumn[column.id] || []}
                 onDeleteColumn={onDeleteColumn}
                 onAddTask={addTask}
+                onDeleteTask={deleteTask}
+                onUpdateTask={updateTask}
               />
             ))}
           </SortableContext>
@@ -110,6 +112,8 @@ function Kanban() {
                 columnTasks={tasksByColumn[activeColumn.id] || []}
                 onDeleteColumn={onDeleteColumn}
                 onAddTask={addTask}
+                onDeleteTask={deleteTask}
+                onUpdateTask={updateTask}
               />
             )}
           </DragOverlay>,
