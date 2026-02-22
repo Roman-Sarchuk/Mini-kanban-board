@@ -71,7 +71,7 @@ export function useTasks() {
 
       const updated = [...prev];
       const [moved] = updated.splice(currentIndex, 1);
-      updated.splice(overIndex, 0, {...moved, columnId: newColumnId });
+      updated.splice(overIndex, 0, { ...moved, columnId: newColumnId });
 
       return updated;
     });
