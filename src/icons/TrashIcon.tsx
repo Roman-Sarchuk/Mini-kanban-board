@@ -1,4 +1,4 @@
-function PlusIcon() {
+function TrashIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,4 +17,4 @@ function PlusIcon() {
   );
 }
 
-export default PlusIcon;
+export default TrashIcon;
