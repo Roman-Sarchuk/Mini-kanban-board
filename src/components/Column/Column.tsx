@@ -1,6 +1,10 @@
-import { useSortable } from "@dnd-kit/sortable";
+import {
+  useSortable,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { Task, Column as ColumnType } from "../../types";
 import AddField from "../AddField/AddField";
@@ -20,8 +24,9 @@ interface ColumnProps {
   onDeleteTask: (taskId: string) => void;
   onUpdateTask: (
     taskId: string,
-    taskUpdates: Partial<Omit<Task, "id" | "columnId">>,
+    taskUpdates: Partial<Omit<Task, "id">>,
   ) => void;
+  isStatic?: boolean;
 }
 
 function Column({
@@ -32,9 +37,11 @@ function Column({
   onAddTask,
   onDeleteTask,
   onUpdateTask,
+  isStatic,
 }: ColumnProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
 
+  // --- drag and drop ---
   const {
     setNodeRef,
     attributes,
@@ -48,7 +55,10 @@ function Column({
       type: "Column",
       columnData,
     },
-    disabled: isEditingTitle, // disable dragging while editing title
+    disabled: isEditingTitle || isStatic, // disable dragging while editing title or if static
+    animateLayoutChanges: (args) => {
+      return args.isSorting || args.isDragging;
+    }
   });
 
   const draggableStyle = {
@@ -56,89 +66,124 @@ function Column({
     transition,
   };
 
+  const taskIds = useMemo(
+    () => columnTasks.map((task) => task.id),
+    [columnTasks],
+  );
+
+  // --- render ---
   return (
     <div
       ref={setNodeRef}
       style={{
         ...draggableStyle,
-        backgroundColor: "#ebecf0",
-        borderRadius: "3px",
-        width: "200px",
-        height: "500px",
-        marginRight: "16px",
-        display: "flex",
-        flexDirection: "column",
-        opacity: isDragging ? 0.5 : 1,
       }}
     >
-      {/* --- header --- */}
       <div
         style={{
+          backgroundColor: "#ebecf0",
+          borderRadius: "3px",
+          width: "200px",
+          maxHeight: "100%",
+          marginRight: "16px",
           display: "flex",
-          backgroundColor: "#d6d6d6",
-          paddingInline: "8px",
-          paddingBlock: "5px",
+          flexDirection: "column",
+          opacity: isDragging ? 0.5 : 1,
         }}
       >
-        {/* title */}
+        {/* --- header --- */}
         <div
           style={{
             display: "flex",
-            gap: 5,
-            width: "100%",
-            cursor: "grab",
+            backgroundColor: "#d6d6d6",
+            paddingInline: "8px",
+            paddingBlock: "5px",
           }}
-          {...attributes}
-          {...listeners}
         >
-          <h4>
-            {"["}
-            {columnTasks.length}
-            {"]"}
-          </h4>
-          <InlineUpdatableField
-            startValue={columnData.title}
-            onUpdate={(newTitle) => {onUpdateColumn(columnData.id, { title: newTitle });}}
-            onIsEditingChange={(isEditing) => setIsEditingTitle(isEditing)}
+          {/* title */}
+          <div
+            style={{
+              display: "flex",
+              gap: 5,
+              width: "100%",
+              cursor: "grab",
+            }}
+            {...attributes}
+            {...listeners}
+          >
+            <h4>
+              {"["}
+              {columnTasks.length}
+              {"]"}
+            </h4>
+            <InlineUpdatableField
+              startValue={columnData.title}
+              onUpdate={(newTitle) => {
+                onUpdateColumn(columnData.id, { title: newTitle });
+              }}
+              onIsEditingChange={(isEditing) => setIsEditingTitle(isEditing)}
+            />
+          </div>
+          {/* button */}
+          <button
+            style={{
+              width: 20,
+              height: 20,
+            }}
+            onClick={() => onDeleteColumn(columnData.id)}
+          >
+            <TrashIcon />
+          </button>
+        </div>
+
+        {/* --- tasks container --- */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "5px",
+            padding: "8px",
+            overflowY: "auto",
+          }}
+        >
+          {!isStatic ? (
+            <SortableContext
+              items={taskIds}
+              strategy={verticalListSortingStrategy}
+            >
+              {columnTasks.map((task) => (
+                <Card
+                  key={task.id}
+                  task={task}
+                  onDelete={onDeleteTask}
+                  onUpdate={onUpdateTask}
+                />
+              ))}
+            </SortableContext>
+          ) : (
+            columnTasks.map((task) => (
+              <Card
+                key={task.id}
+                task={task}
+                onDelete={onDeleteTask}
+                onUpdate={onUpdateTask}
+              />
+            ))
+          )}
+        </div>
+
+        {/* --- footer --- */}
+        <div
+          style={{
+            backgroundColor: "#d5d3d3",
+          }}
+        >
+          <AddField
+            title="Enter task title"
+            onAdd={(title) => onAddTask(columnData.id, title)}
           />
         </div>
-        {/* button */}
-        <button
-          style={{
-            width: 20,
-            height: 20,
-          }}
-          onClick={() => onDeleteColumn(columnData.id)}
-        >
-          <TrashIcon />
-        </button>
       </div>
-
-      {/* --- tasks container --- */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "5px",
-          flexGrow: 1,
-          padding: "8px",
-        }}
-      >
-        {columnTasks.map((task) => (
-          <Card
-            key={task.id}
-            task={task}
-            onDelete={onDeleteTask}
-            onUpdate={onUpdateTask}
-          />
-        ))}
-      </div>
-
-      {/* --- footer --- */}
-      <AddField
-        title="Enter task title"
-        onAdd={(title) => onAddTask(columnData.id, title)}
-      />
     </div>
   );
 }

@@ -2,9 +2,13 @@ import {
   DndContext,
   DragOverlay,
   type DragEndEvent,
+  type DragOverEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
-import { SortableContext } from "@dnd-kit/sortable";
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 
@@ -13,6 +17,7 @@ import Column from "../../components/Column/Column";
 import { useColumns } from "../../hooks/useColumns";
 import { useTasks } from "../../hooks/useTasks";
 import type { Column as ColumnType, Task } from "../../types";
+import Card from "../../components/Card/Card";
 
 function Kanban() {
   // --- CRUD for columns and tasks ---
@@ -52,16 +57,23 @@ function Kanban() {
   const columnIds = useMemo(() => columns.map((col) => col.id), [columns]);
 
   const [activeColumn, setActiveColumn] = useState<ColumnType | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.columnData);
       return;
     }
+
+    if (event.active.data.current?.type === "Task") {
+      setActiveTask(event.active.data.current.task);
+      return;
+    }
   };
 
   const onDragEnd = (event: DragEndEvent) => {
     setActiveColumn(null);
+    setActiveTask(null);
 
     const { active, over } = event;
     if (!over) return;
@@ -75,20 +87,77 @@ function Kanban() {
         over.data.current.columnData.id,
       );
     }
+
+    if (
+      active.data.current?.type === "Task" &&
+      over.data.current?.type === "Task"
+    ) {
+      if (active.data.current.task.id === over.data.current.task.id) return;  
+
+      moveTask(
+        active.data.current.task.id,
+        over.data.current.task.id,
+        over.data.current.task.columnId,
+      );
+    }
+  };
+
+  const onDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    if (
+      active.data.current?.type === "Task" &&
+      over.data.current?.type === "Task" &&
+      active.data.current.task.columnId !== over.data.current.task.columnId
+    ) {
+      moveTask(
+        active.data.current.task.id,
+        over.data.current.task.id,
+        over.data.current.task.columnId,
+      );
+    }
+
+    if (
+      active.data.current?.type === "Task" &&
+      over?.data.current?.type === "Column" &&
+      active.data.current.task.columnId !== over.data.current.columnData.id
+    ) {
+      updateTask(active.data.current.task.id, {
+        columnId: over.data.current.columnData.id,
+      });
+    }
   };
 
   // --- render ---
   return (
-    <div className="kanban-background">
-      <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <div
+      className="kanban-background"
+      style={{
+        height: "100%",
+        padding: "16px",
+      }}
+    >
+      <DndContext
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+      >
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            padding: "16px",
+            paddingBottom: "20px",
+            overflowX: "auto",
+            overflowY: "hidden",
+            width: "100%",
+            height: "100%",
           }}
         >
-          <SortableContext items={columnIds}>
+          <SortableContext
+            items={columnIds}
+            strategy={horizontalListSortingStrategy}
+          >
             {columns.map((column) => (
               <Column
                 key={column.id}
@@ -107,7 +176,7 @@ function Kanban() {
 
         {createPortal(
           <DragOverlay>
-            {activeColumn && (
+            {activeColumn ? (
               <Column
                 columnData={activeColumn}
                 columnTasks={tasksByColumn[activeColumn.id] || []}
@@ -116,8 +185,15 @@ function Kanban() {
                 onAddTask={addTask}
                 onDeleteTask={deleteTask}
                 onUpdateTask={updateTask}
+                isStatic
               />
-            )}
+            ) : activeTask ? (
+              <Card
+                task={activeTask}
+                onDelete={deleteTask}
+                onUpdate={updateTask}
+              />
+            ) : null}
           </DragOverlay>,
           document.body,
         )}
