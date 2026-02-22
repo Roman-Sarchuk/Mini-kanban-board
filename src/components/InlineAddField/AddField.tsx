@@ -2,12 +2,12 @@ import { useState } from "react";
 
 import PlusIcon from "../../icons/PlusIcon";
 
-interface InlineAddFieldProps {
+interface AddFieldProps {
   title: string;
   onAdd: (title: string) => void;
 }
 
-function InlineAddField({ title, onAdd }: InlineAddFieldProps) {
+function AddField({ title, onAdd }: AddFieldProps) {
   const [value, setValue] = useState("");
 
   const handleAdd = () => {
@@ -46,4 +46,4 @@ function InlineAddField({ title, onAdd }: InlineAddFieldProps) {
   );
 }
 
-export default InlineAddField;
+export default AddField;

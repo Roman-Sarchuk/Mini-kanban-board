@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 import type { Task, Column as ColumnType } from "../../types";
-import InlineAddField from "../InlineAddField/InlineAddField";
+import AddField from "../InlineAddField/AddField";
 import TrashIcon from "../../icons/TrashIcon";
 import Card from "../Card/Card";
 
@@ -106,7 +106,7 @@ function Column({ columnData, columnTasks, onDeleteColumn, onAddTask, onDeleteTa
       </div>
 
       {/* --- footer --- */}
-      <InlineAddField
+      <AddField
         title="Enter task title"
         onAdd={(title) => onAddTask(columnData.id, title)}
       />

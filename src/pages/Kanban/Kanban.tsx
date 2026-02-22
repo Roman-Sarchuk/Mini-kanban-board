@@ -8,7 +8,7 @@ import { SortableContext } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 
-import InlineAddField from "../../components/InlineAddField/InlineAddField";
+import InlineAddField from "../../components/InlineAddField/AddField";
 import Column from "../../components/Column/Column";
 import { useColumns } from "../../hooks/useColumns";
 import { useTasks } from "../../hooks/useTasks";
