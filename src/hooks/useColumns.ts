@@ -5,23 +5,13 @@ import { type Column } from "../types";
 
 const STORAGE_KEY = "my-kanban-columns";
 
-function migrateColumns(raw: unknown[]): Column[] {
-  return raw.flatMap((item) => {
-    const { id, title } = item as Record<string, unknown>;
-    if (typeof id !== "string" || typeof title !== "string") return [];
-    return [{ id, title }];
-  });
-}
-
 export function useColumns() {
   const [columns, setColumns] = useState<Column[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return [];
 
     try {
-      const parsed = JSON.parse(stored);
-      if (!Array.isArray(parsed)) return [];
-      return migrateColumns(parsed);
+      return JSON.parse(stored) as Column[];
     } catch {
       return [];
     }
@@ -47,10 +37,7 @@ export function useColumns() {
     });
   };
 
-  const updateColumn = (
-    id: string,
-    updates: Partial<Omit<Column, "id">>,
-  ) => {
+  const updateColumn = (id: string, updates: Partial<Omit<Column, "id">>) => {
     setColumns((prev) => {
       const existingColumn = prev.find((column) => column.id === id);
       if (!existingColumn) return prev;
