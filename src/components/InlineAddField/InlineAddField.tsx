@@ -18,6 +18,12 @@ function InlineAddField({ title, onAdd }: InlineAddFieldProps) {
     setValue("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleAdd();
+    }
+  };
+
   return (
     <div>
       <input
@@ -25,6 +31,7 @@ function InlineAddField({ title, onAdd }: InlineAddFieldProps) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={title}
+        onKeyDown={handleKeyDown}
       />
       <button
         onClick={handleAdd}
