@@ -11,16 +11,16 @@ export default function InlineUpdatableField({
   onUpdate,
   onIsEditingChange,
 }: InlineUpdatableFieldProps) {
-  // --- inline editing ---
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(startValue);
   const [editedValue, setEditedValue] = useState(startValue);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setEditedValue(value);
-  }, [value]);
+    if (!isEditing) {
+      setEditedValue(startValue);
+    }
+  }, [startValue, isEditing]);
 
   useEffect(() => {
     onIsEditingChange?.(isEditing);
@@ -29,23 +29,22 @@ export default function InlineUpdatableField({
       inputRef.current?.focus();
       inputRef.current?.select();
     }
-  }, [isEditing]);
+  }, [isEditing, onIsEditingChange]);
 
   const handleSave = () => {
     const trimmed = editedValue.trim();
 
     if (!trimmed) {
-      setEditedValue(value);
+      setEditedValue(startValue);
     } else if (trimmed !== startValue) {
       onUpdate(trimmed);
-      setValue(trimmed);
     }
 
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditedValue(value);
+    setEditedValue(startValue);
     setIsEditing(false);
   };
 
@@ -60,26 +59,28 @@ export default function InlineUpdatableField({
   };
 
   const handleRightClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // prevent context menu
+    e.preventDefault();
     setIsEditing(true);
   };
 
-  // --- render ---
   return (
-    <div onContextMenu={handleRightClick}>
+    <div
+      onContextMenu={handleRightClick}
+      style={{ width: "100%" }}
+    >
       {isEditing ? (
         <input
           ref={inputRef}
           value={editedValue}
           onChange={(e) => setEditedValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          onBlur={handleSave}
-          style={{
-            width: "100%",
-          }}
+          onBlur={handleCancel}
+          style={{ width: "100%" }}
         />
       ) : (
-        <div>{value}</div>
+        <div style={{ width: "100%" }}>
+          {startValue}
+        </div>
       )}
     </div>
   );
