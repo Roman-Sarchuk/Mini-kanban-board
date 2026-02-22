@@ -95,6 +95,7 @@ function Kanban() {
                 columnData={column}
                 columnTasks={tasksByColumn[column.id] || []}
                 onDeleteColumn={onDeleteColumn}
+                onUpdateColumn={updateColumn}
                 onAddTask={addTask}
                 onDeleteTask={deleteTask}
                 onUpdateTask={updateTask}
@@ -111,6 +112,7 @@ function Kanban() {
                 columnData={activeColumn}
                 columnTasks={tasksByColumn[activeColumn.id] || []}
                 onDeleteColumn={onDeleteColumn}
+                onUpdateColumn={updateColumn}
                 onAddTask={addTask}
                 onDeleteTask={deleteTask}
                 onUpdateTask={updateTask}

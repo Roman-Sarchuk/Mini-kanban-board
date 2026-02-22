@@ -1,21 +1,40 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useEffect, useState } from "react";
 
 import type { Task, Column as ColumnType } from "../../types";
 import AddField from "../AddField/AddField";
 import TrashIcon from "../../icons/TrashIcon";
 import Card from "../Card/Card";
+import InlineUpdatableField from "../InlineUpdatableField/InlineUpdatableField";
 
 interface ColumnProps {
   columnData: ColumnType;
   columnTasks: Task[];
   onDeleteColumn: (columnId: string) => void;
+  onUpdateColumn: (
+    columnId: string,
+    columnUpdates: Partial<Omit<ColumnType, "id">>,
+  ) => void;
   onAddTask: (columnId: string, title: string) => void;
   onDeleteTask: (taskId: string) => void;
-  onUpdateTask: (taskId: string, taskUpdates: Task) => void;
+  onUpdateTask: (
+    taskId: string,
+    taskUpdates: Partial<Omit<Task, "id" | "columnId">>,
+  ) => void;
 }
 
-function Column({ columnData, columnTasks, onDeleteColumn, onAddTask, onDeleteTask, onUpdateTask }: ColumnProps) {
+function Column({
+  columnData,
+  columnTasks,
+  onDeleteColumn,
+  onUpdateColumn,
+  onAddTask,
+  onDeleteTask,
+  onUpdateTask,
+}: ColumnProps) {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+
   const {
     setNodeRef,
     attributes,
@@ -29,6 +48,7 @@ function Column({ columnData, columnTasks, onDeleteColumn, onAddTask, onDeleteTa
       type: "Column",
       columnData,
     },
+    disabled: isEditingTitle, // disable dragging while editing title
   });
 
   const draggableStyle = {
@@ -76,7 +96,11 @@ function Column({ columnData, columnTasks, onDeleteColumn, onAddTask, onDeleteTa
             {columnTasks.length}
             {"]"}
           </h4>
-          <h4>{columnData.title}</h4>
+          <InlineUpdatableField
+            startValue={columnData.title}
+            onUpdate={(newTitle) => {onUpdateColumn(columnData.id, { title: newTitle });}}
+            onIsEditingChange={(isEditing) => setIsEditingTitle(isEditing)}
+          />
         </div>
         {/* button */}
         <button
@@ -101,7 +125,12 @@ function Column({ columnData, columnTasks, onDeleteColumn, onAddTask, onDeleteTa
         }}
       >
         {columnTasks.map((task) => (
-          <Card key={task.id} task={task} onDelete={onDeleteTask} onUpdate={onUpdateTask} />
+          <Card
+            key={task.id}
+            task={task}
+            onDelete={onDeleteTask}
+            onUpdate={onUpdateTask}
+          />
         ))}
       </div>
 
