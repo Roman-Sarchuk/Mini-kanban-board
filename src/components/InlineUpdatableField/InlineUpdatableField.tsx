@@ -1,14 +1,15 @@
-import type { Task } from "../../types";
 import { useState, useEffect, useRef } from "react";
 
 interface InlineUpdatableFieldProps {
   startValue: string;
   onUpdate: (value: string) => void;
+  onIsEditingChange?: (isEditing: boolean) => void;
 }
 
 export default function InlineUpdatableField({
   startValue,
   onUpdate,
+  onIsEditingChange,
 }: InlineUpdatableFieldProps) {
   // --- inline editing ---
   const [isEditing, setIsEditing] = useState(false);
@@ -22,6 +23,8 @@ export default function InlineUpdatableField({
   }, [value]);
 
   useEffect(() => {
+    onIsEditingChange?.(isEditing);
+
     if (isEditing) {
       inputRef.current?.focus();
       inputRef.current?.select();
@@ -35,13 +38,14 @@ export default function InlineUpdatableField({
       setEditedValue(value);
     } else if (trimmed !== startValue) {
       onUpdate(trimmed);
+      setValue(trimmed);
     }
 
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditedValue(value)
+    setEditedValue(value);
     setIsEditing(false);
   };
 
@@ -66,10 +70,13 @@ export default function InlineUpdatableField({
       {isEditing ? (
         <input
           ref={inputRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={editedValue}
+          onChange={(e) => setEditedValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={handleSave}
+          style={{
+            width: "100%",
+          }}
         />
       ) : (
         <div>{value}</div>
