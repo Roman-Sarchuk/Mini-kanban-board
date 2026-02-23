@@ -1,11 +1,11 @@
-import { renderHook, act } from "@testing-library/react";
+import { vi } from "vitest";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { useColumns } from "../hooks/useColumns";
-import test from "node:test";
 
 describe("useColumns hook", () => {
   beforeEach(() => {
     localStorage.clear();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("add new column", () => {
@@ -69,16 +69,22 @@ describe("useColumns hook", () => {
     expect(result.current.columns[0].id).toBe(secondId);
   });
 
-  test("saves columns to localStorage when columns change", () => {
-    const setItemSpy = jest.spyOn(Storage.prototype, "setItem");
+  test("saves columns to localStorage", async () => {
+    const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
 
     const { result } = renderHook(() => useColumns());
 
-    act(() => {
+    await act(async () => {
       result.current.addColumn("New Column");
     });
 
-    const savedValues = JSON.parse(setItemSpy.mock.calls[0][1]);
-    expect(savedValues).toHaveLength(1);
+    expect(setItemSpy).toHaveBeenCalled();
+
+    // Знаходимо саме той виклик що зберігає columns (не початковий)
+    const calls = setItemSpy.mock.calls.filter(
+      ([key]) => key === "my-kanban-columns",
+    );
+    const saved = JSON.parse(calls[calls.length - 1][1]);
+    expect(saved).toHaveLength(1);
   });
 });

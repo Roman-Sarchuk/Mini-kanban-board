@@ -1,10 +1,11 @@
-import { renderHook, act } from "@testing-library/react";
+import { vi } from "vitest";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { useTasks } from "../hooks/useTasks";
 
 describe("useTasks hook", () => {
   beforeEach(() => {
     localStorage.clear();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("init empty array, if localStorage is empty", () => {
@@ -92,7 +93,6 @@ describe("useTasks hook", () => {
     });
 
     const firstId = result.current.tasks[0].id;
-    const secondId = result.current.tasks[1].id;
 
     act(() => {
       result.current.updateTask(firstId, { columnId: "column-2" });
@@ -101,16 +101,22 @@ describe("useTasks hook", () => {
     expect(result.current.tasks[0].columnId).toBe("column-2");
   });
 
-  test("saves tasks to localStorage when tasks change", () => {
-    const setItemSpy = jest.spyOn(Storage.prototype, "setItem");
+  test("saves tasks to localStorage", async () => {
+    const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
 
     const { result } = renderHook(() => useTasks());
 
-    act(() => {
-      result.current.addTask("column-1", "Task");
+    await act(async () => {
+      result.current.addTask("column-1", "Task 1");
     });
 
-    const savedValues = JSON.parse(setItemSpy.mock.calls[0][1]);
-    expect(savedValues).toHaveLength(1);
+    expect(setItemSpy).toHaveBeenCalled();
+
+    // Знаходимо саме той виклик що зберігає tasks (не початковий)
+    const calls = setItemSpy.mock.calls.filter(
+      ([key]) => key === "my-kanban-tasks",
+    );
+    const saved = JSON.parse(calls[calls.length - 1][1]);
+    expect(saved).toHaveLength(1);
   });
 });
