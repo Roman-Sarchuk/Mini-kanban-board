@@ -40,7 +40,7 @@ export function useTasks() {
 
   const updateTask = (
     id: string,
-    updates: Partial<Omit<Task, "id" | "columnId">>,
+    updates: Partial<Omit<Task, "id">>,
   ) => {
     setTasks((prev) => {
       const existingTask = prev.find((task) => task.id === id);

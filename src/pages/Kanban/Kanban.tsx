@@ -1,30 +1,217 @@
-import InlineAddField from "../../components/InlineAddField/InlineAddField"
-import Column from "../../components/Column/Column"
-import { useColumns } from "../../hooks/useColumns"
-import { useTasks } from "../../hooks/useTasks"
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
+} from "@dnd-kit/core";
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
+import { useState, useMemo } from "react";
+import { createPortal } from "react-dom";
+
+import AddField from "../../components/AddField/AddField";
+import Column from "../../components/Column/Column";
+import { useColumns } from "../../hooks/useColumns";
+import { useTasks } from "../../hooks/useTasks";
+import type { Column as ColumnType, Task } from "../../types";
+import Card from "../../components/Card/Card";
 
 function Kanban() {
-  const { columns, addColumn, updateColumn, deleteColumn, moveColumn } = useColumns()
-  const { tasks, addTask, updateTask, deleteTask, moveTask } = useTasks()
+  // --- CRUD for columns and tasks ---
+  const { columns, addColumn, updateColumn, deleteColumn, moveColumn } =
+    useColumns();
+  const { tasks, addTask, updateTask, deleteTask, moveTask } = useTasks();
 
+  const tasksByColumn = useMemo(() => {
+    const map: Record<string, Task[]> = {};
+
+    tasks.forEach((task) => {
+      if (!map[task.columnId]) {
+        map[task.columnId] = [];
+      }
+      map[task.columnId].push(task);
+    });
+
+    return map;
+  }, [tasks]);
+
+  const onDeleteColumn = (columnId: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this column? All tasks in this column will also be deleted.",
+    );
+    if (!confirmDelete) return;
+
+    const columnTasks = tasks.filter((task) => task.columnId === columnId);
+
+    if (columnTasks.length > 0) {
+      columnTasks.forEach((task) => deleteTask(task.id));
+    }
+
+    deleteColumn(columnId);
+  };
+
+  // --- drag and drop ---
+  const columnIds = useMemo(() => columns.map((col) => col.id), [columns]);
+
+  const [activeColumn, setActiveColumn] = useState<ColumnType | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  const onDragStart = (event: DragStartEvent) => {
+    if (event.active.data.current?.type === "Column") {
+      setActiveColumn(event.active.data.current.columnData);
+      return;
+    }
+
+    if (event.active.data.current?.type === "Task") {
+      setActiveTask(event.active.data.current.task);
+      return;
+    }
+  };
+
+  const onDragEnd = (event: DragEndEvent) => {
+    setActiveColumn(null);
+    setActiveTask(null);
+
+    const { active, over } = event;
+    if (!over) return;
+
+    if (
+      active.data.current?.type === "Column" &&
+      over.data.current?.type === "Column"
+    ) {
+      moveColumn(
+        active.data.current.columnData.id,
+        over.data.current.columnData.id,
+      );
+    }
+
+    if (
+      active.data.current?.type === "Task" &&
+      over.data.current?.type === "Task"
+    ) {
+      if (active.data.current.task.id === over.data.current.task.id) return;
+
+      moveTask(
+        active.data.current.task.id,
+        over.data.current.task.id,
+        over.data.current.task.columnId,
+      );
+    }
+  };
+
+  const onDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    // if (
+    //   active.data.current?.type === "Column" &&
+    //   over.data.current?.type === "Task" &&
+    //   active.data.current.columnData.id !== over.data.current.task.columnId
+    // ) {
+    //   moveColumn(
+    //     active.data.current.columnData.id,
+    //     over.data.current.task.columnId,
+    //   );
+    // }
+
+    if (
+      active.data.current?.type === "Task" &&
+      over.data.current?.type === "Task" &&
+      active.data.current.task.columnId !== over.data.current.task.columnId
+    ) {
+      moveTask(
+        active.data.current.task.id,
+        over.data.current.task.id,
+        over.data.current.task.columnId,
+      );
+    }
+
+    if (
+      active.data.current?.type === "Task" &&
+      over?.data.current?.type === "Column" &&
+      active.data.current.task.columnId !== over.data.current.columnData.id
+    ) {
+      updateTask(active.data.current.task.id, {
+        columnId: over.data.current.columnData.id,
+      });
+    }
+  };
+
+  // --- render ---
   return (
-    <div className="kanban-background">
-      <div className="board">
-        {columns.map(column => <Column 
-          key={column.id} 
-          title={column.title} 
-          tasks={tasks} 
-          // updateColumn={updateColumn} 
-          // deleteColumn={deleteColumn} 
-          // addTask={addTask} 
-          // updateTask={updateTask} 
-          // deleteTask={deleteTask} 
-          // moveTask={moveTask} 
-        />)}
-        <InlineAddField title="Enter column title" onAdd={addColumn} />
-      </div>
+    <div
+      className="kanban-background"
+      style={{
+        height: "100%",
+        padding: "16px",
+      }}
+    >
+      <DndContext
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            paddingBottom: "20px",
+            overflowX: "auto",
+            overflowY: "hidden",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <SortableContext
+            items={columnIds}
+            strategy={horizontalListSortingStrategy}
+          >
+            {columns.map((column) => (
+              <Column
+                key={column.id}
+                columnData={column}
+                columnTasks={tasksByColumn[column.id] || []}
+                onDeleteColumn={onDeleteColumn}
+                onUpdateColumn={updateColumn}
+                onAddTask={addTask}
+                onDeleteTask={deleteTask}
+                onUpdateTask={updateTask}
+              />
+            ))}
+          </SortableContext>
+          <AddField title="Enter column title" onAdd={addColumn} />
+        </div>
+
+        {createPortal(
+          <DragOverlay>
+            {activeColumn ? (
+              <Column
+                columnData={activeColumn}
+                columnTasks={tasksByColumn[activeColumn.id] || []}
+                onDeleteColumn={onDeleteColumn}
+                onUpdateColumn={updateColumn}
+                onAddTask={addTask}
+                onDeleteTask={deleteTask}
+                onUpdateTask={updateTask}
+                isStatic
+              />
+            ) : activeTask ? (
+              <Card
+                task={activeTask}
+                onDelete={deleteTask}
+                onUpdate={updateTask}
+              />
+            ) : null}
+          </DragOverlay>,
+          document.body,
+        )}
+      </DndContext>
     </div>
-  )
+  );
 }
 
-export default Kanban
+export default Kanban;
