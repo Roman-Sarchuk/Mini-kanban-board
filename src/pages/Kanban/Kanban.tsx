@@ -1,4 +1,5 @@
 import {
+  closestCenter,
   DndContext,
   DragOverlay,
   type DragEndEvent,
@@ -92,7 +93,7 @@ function Kanban() {
       active.data.current?.type === "Task" &&
       over.data.current?.type === "Task"
     ) {
-      if (active.data.current.task.id === over.data.current.task.id) return;  
+      if (active.data.current.task.id === over.data.current.task.id) return;
 
       moveTask(
         active.data.current.task.id,
@@ -105,6 +106,17 @@ function Kanban() {
   const onDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
     if (!over) return;
+
+    // if (
+    //   active.data.current?.type === "Column" &&
+    //   over.data.current?.type === "Task" &&
+    //   active.data.current.columnData.id !== over.data.current.task.columnId
+    // ) {
+    //   moveColumn(
+    //     active.data.current.columnData.id,
+    //     over.data.current.task.columnId,
+    //   );
+    // }
 
     if (
       active.data.current?.type === "Task" &&

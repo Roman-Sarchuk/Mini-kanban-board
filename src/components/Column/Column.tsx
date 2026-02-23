@@ -56,9 +56,7 @@ function Column({
       columnData,
     },
     disabled: isEditingTitle || isStatic, // disable dragging while editing title or if static
-    animateLayoutChanges: (args) => {
-      return args.isSorting || args.isDragging;
-    }
+    animateLayoutChanges: (args) => false,
   });
 
   const draggableStyle = {
@@ -77,6 +75,8 @@ function Column({
       ref={setNodeRef}
       style={{
         ...draggableStyle,
+        height: "100%",
+        minHeight: "300px",
       }}
     >
       <div
