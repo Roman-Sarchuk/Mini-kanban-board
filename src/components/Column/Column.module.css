@@ -1,0 +1,73 @@
+.columnContainer {
+  height: 100%;
+  min-height: 300px;
+}
+
+.column {
+  border-radius: 3px;
+  width: 200px;
+  max-height: 100%;
+  margin-right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.colunHeader {
+  display: flex;
+  padding-inline: 8px;
+  padding-block: 5px;
+  color: aliceblue;
+
+  border-bottom: 2px solid rgba(157, 157, 157, 0.349);
+  padding-bottom: 8px;
+}
+
+.taskContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-inline: 8px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.columnFooter {
+  padding: 5px;
+}
+
+.dashedBorder {
+  /* border: 2px dashed #25639a; */
+  /* border-radius: 3px; */
+}
+
+.columnTitleContainer {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  cursor: grab;
+}
+
+.columnTaskCounetr {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  height: fit-content;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.colunHeader button {
+  cursor: pointer;
+  padding: 0px;
+  background-color: transparent;
+  color: #e8e8e8;
+  border: none;
+  opacity: 0.8;
+}
+
+.colunHeader button:hover {
+  opacity: 0.6;
+}

@@ -40,3 +40,12 @@
   flex-direction: row;
   gap: 16px;
 }
+
+
+
+
+
+
+.kanbanBackground {
+  scrollbar-color: #72500c rgba(0,0,0,0.1);
+}

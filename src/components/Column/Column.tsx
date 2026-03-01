@@ -6,6 +6,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 
+import style from "./Column.module.css";
 import type { Task, Column as ColumnType } from "../../types";
 import AddField from "../AddField/AddField";
 import TrashIcon from "../../icons/TrashIcon";
@@ -26,7 +27,7 @@ interface ColumnProps {
     taskId: string,
     taskUpdates: Partial<Omit<Task, "id">>,
   ) => void;
-  isStatic?: boolean;
+  isDragOverlay?: boolean;
 }
 
 function Column({
@@ -37,7 +38,7 @@ function Column({
   onAddTask,
   onDeleteTask,
   onUpdateTask,
-  isStatic,
+  isDragOverlay,
 }: ColumnProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
 
@@ -55,7 +56,7 @@ function Column({
       type: "Column",
       columnData,
     },
-    disabled: isEditingTitle || isStatic, // disable dragging while editing title or if static
+    disabled: isEditingTitle || isDragOverlay, // disable dragging while editing title or if is drag overlay
     animateLayoutChanges: (args) => false,
   });
 
@@ -72,51 +73,29 @@ function Column({
   // --- render ---
   return (
     <div
+      className={style.columnContainer}
       data-testid="column"
       ref={setNodeRef}
       style={{
         ...draggableStyle,
-        height: "100%",
-        minHeight: "300px",
       }}
     >
       <div
+        className={style.column}
         style={{
-          backgroundColor: "#ebecf0",
-          borderRadius: "3px",
-          width: "200px",
-          maxHeight: "100%",
-          marginRight: "16px",
-          display: "flex",
-          flexDirection: "column",
           opacity: isDragging ? 0.5 : 1,
+          transform: isDragOverlay ? "rotate(2deg)" : undefined,
         }}
       >
         {/* --- header --- */}
-        <div
-          style={{
-            display: "flex",
-            backgroundColor: "#d6d6d6",
-            paddingInline: "8px",
-            paddingBlock: "5px",
-          }}
-        >
+        <div className={`${style.colunHeader} ${style.dashedBorder}`}>
           {/* title */}
           <div
-            style={{
-              display: "flex",
-              gap: 5,
-              width: "100%",
-              cursor: "grab",
-            }}
+            className={style.columnTitleContainer}
             {...attributes}
             {...listeners}
           >
-            <h4>
-              {"["}
-              {columnTasks.length}
-              {"]"}
-            </h4>
+            <span className={style.columnTaskCounetr}>{columnTasks.length}</span>
             <InlineUpdatableField
               startValue={columnData.title}
               onUpdate={(newTitle) => {
@@ -139,16 +118,8 @@ function Column({
         </div>
 
         {/* --- tasks container --- */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "5px",
-            padding: "8px",
-            overflowY: "auto",
-          }}
-        >
-          {!isStatic ? (
+        <div className={`${style.taskContainer} ${style.dashedBorder}`}>
+          {!isDragOverlay ? (
             <SortableContext
               items={taskIds}
               strategy={verticalListSortingStrategy}
@@ -176,10 +147,8 @@ function Column({
 
         {/* --- footer --- */}
         <div
+          className={`${style.columnFooter} ${style.dashedBorder}`}
           data-testid="add-task-field"
-          style={{
-            backgroundColor: "#d5d3d3",
-          }}
         >
           <AddField
             title="Enter task title"

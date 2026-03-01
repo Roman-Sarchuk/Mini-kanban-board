@@ -186,7 +186,7 @@ function Kanban() {
                 onAddTask={addTask}
                 onDeleteTask={deleteTask}
                 onUpdateTask={updateTask}
-                isStatic
+                isDragOverlay={true}
               />
             ) : activeTask ? (
               <Card
