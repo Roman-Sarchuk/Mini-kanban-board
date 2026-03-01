@@ -9,10 +9,7 @@ import InlineUpdatableField from "../InlineUpdatableField/InlineUpdatableField";
 interface CardProps {
   task: Task;
   onDelete: (taskId: string) => void;
-  onUpdate: (
-    taskId: string,
-    taskUpdates: Partial<Omit<Task, "id">>,
-  ) => void;
+  onUpdate: (taskId: string, taskUpdates: Partial<Omit<Task, "id">>) => void;
 }
 
 export default function Card({ task, onDelete, onUpdate }: CardProps) {
@@ -45,6 +42,7 @@ export default function Card({ task, onDelete, onUpdate }: CardProps) {
 
   return (
     <div
+      data-testid="card"
       ref={setNodeRef}
       style={{
         ...draggableStyle,
@@ -69,7 +67,11 @@ export default function Card({ task, onDelete, onUpdate }: CardProps) {
       </div>
 
       {!isEditingText && (
-        <button className={styles.deleteBtn} onClick={() => onDelete(task.id)}>
+        <button
+          data-testid="delete-task-button"
+          className={styles.deleteBtn}
+          onClick={() => onDelete(task.id)}
+        >
           &times;
         </button>
       )}

@@ -183,7 +183,9 @@ function Kanban() {
               />
             ))}
           </SortableContext>
-          <AddField title="Enter column title" onAdd={addColumn} />
+          <div data-testid="add-column-field">
+            <AddField title="Enter column title" onAdd={addColumn} />
+          </div>
         </div>
 
         {createPortal(
