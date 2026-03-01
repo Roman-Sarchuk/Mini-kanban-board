@@ -150,26 +150,28 @@ function Kanban() {
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div className={style.board}>
-          <SortableContext
-            items={columnIds}
-            strategy={horizontalListSortingStrategy}
-          >
-            {columns.map((column) => (
-              <Column
-                key={column.id}
-                columnData={column}
-                columnTasks={tasksByColumn[column.id] || []}
-                onDeleteColumn={onDeleteColumn}
-                onUpdateColumn={updateColumn}
-                onAddTask={addTask}
-                onDeleteTask={deleteTask}
-                onUpdateTask={updateTask}
-              />
-            ))}
-          </SortableContext>
-          <div data-testid="add-column-field">
-            <AddField title="Enter column title" onAdd={addColumn} />
+        <div className={style.boardContainer}>
+          <div className={style.board}>
+            <SortableContext
+              items={columnIds}
+              strategy={horizontalListSortingStrategy}
+            >
+              {columns.map((column) => (
+                <Column
+                  key={column.id}
+                  columnData={column}
+                  columnTasks={tasksByColumn[column.id] || []}
+                  onDeleteColumn={onDeleteColumn}
+                  onUpdateColumn={updateColumn}
+                  onAddTask={addTask}
+                  onDeleteTask={deleteTask}
+                  onUpdateTask={updateTask}
+                />
+              ))}
+            </SortableContext>
+            <div data-testid="add-column-field">
+              <AddField title="Enter column title" onAdd={addColumn} />
+            </div>
           </div>
         </div>
 
