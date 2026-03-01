@@ -57,7 +57,6 @@ function Column({
       columnData,
     },
     disabled: isEditingTitle || isDragOverlay, // disable dragging while editing title or if is drag overlay
-    animateLayoutChanges: (args) => false,
   });
 
   const draggableStyle = {
