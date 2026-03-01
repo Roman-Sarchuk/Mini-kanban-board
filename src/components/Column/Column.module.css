@@ -13,6 +13,10 @@
   gap: 5px;
 }
 
+.column {
+  scrollbar-color: #72500ca1 rgba(0,0,0,0.1);
+}
+
 .colunHeader {
   display: flex;
   padding-inline: 8px;

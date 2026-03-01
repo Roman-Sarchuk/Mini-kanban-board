@@ -6,6 +6,10 @@
   background-size: cover;
 }
 
+.kanbanBackground {
+  scrollbar-color: #72500c rgba(0,0,0,0.1);
+}
+
 .boardContainer {
   height: 100%;
   display: inline-block; /* 🔥 важливо */
@@ -42,10 +46,3 @@
 }
 
 
-
-
-
-
-.kanbanBackground {
-  scrollbar-color: #72500c rgba(0,0,0,0.1);
-}
