@@ -173,6 +173,16 @@ function Kanban() {
               <AddField title="Enter column title" onAdd={addColumn} />
             </div>
           </div>
+          <span
+            style={{
+              display: "block",
+              color: "white",
+              fontSize: "14px",
+              opacity: 0.8,
+            }}
+          >
+            App mode: {import.meta.env.VITE_APP_STATUS}
+          </span>
         </div>
 
         {createPortal(
