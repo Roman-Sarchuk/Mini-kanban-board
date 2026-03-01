@@ -1,0 +1,36 @@
+.addField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  color: #555;
+}
+
+.addField input {
+    min-width: 120px;
+  width: 100%;
+  border-radius: 5px;
+
+  background-color: transparent;
+  border: none;
+  padding: 2px;
+  padding-inline: 8px;
+
+  background-image: url("../../assets/stiker2.png");
+  background-size: 100% 100%; /* 🔥 розтягує по картці */
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.addField button {
+  cursor: pointer;
+  padding: 0px;
+  background-color: transparent;
+  color: #e8e8e8;
+  border: none;
+}
+
+.addField button:hover {
+  opacity: 0.8;
+}
