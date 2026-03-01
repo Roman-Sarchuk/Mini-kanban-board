@@ -72,6 +72,7 @@ function Column({
   // --- render ---
   return (
     <div
+      data-testid="column"
       ref={setNodeRef}
       style={{
         ...draggableStyle,
@@ -126,6 +127,7 @@ function Column({
           </div>
           {/* button */}
           <button
+            data-testid="delete-column-button"
             style={{
               width: 20,
               height: 20,
@@ -174,6 +176,7 @@ function Column({
 
         {/* --- footer --- */}
         <div
+          data-testid="add-task-field"
           style={{
             backgroundColor: "#d5d3d3",
           }}
