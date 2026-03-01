@@ -1,6 +1,6 @@
 .card {
   position: relative;
-  background-color: #fff;
+  /* background-color: #fff; */
   border-radius: 8px;
   padding: 12px 16px;
   margin: 8px 0;
@@ -10,7 +10,14 @@
   gap: 8px;
   font-family: sans-serif;
   height: fit-content;
+
+  background-image: url("../../assets/stiker2.png");
+  background-size: 100% 100%; /* 🔥 розтягує по картці */
+  background-repeat: no-repeat;
+  background-position: center;
 }
+
+
 
 .deleteBtn {
   background-color: transparent;
