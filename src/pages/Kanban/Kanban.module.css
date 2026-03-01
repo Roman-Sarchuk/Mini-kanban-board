@@ -1,0 +1,22 @@
+.kanbanBackground {
+  height: 100%;
+  padding: 16px;
+
+  background-image: url("../../assets/room.jpg");
+  background-size: cover;
+}
+
+.board {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%;
+
+  padding: 30px;
+  background-image: url("../../assets/board.jpg");
+  background-size: cover;
+  border-radius: 10px;
+}

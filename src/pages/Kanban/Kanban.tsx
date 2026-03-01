@@ -13,6 +13,7 @@ import {
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 
+import style from "./Kanban.module.css";
 import AddField from "../../components/AddField/AddField";
 import Column from "../../components/Column/Column";
 import { useColumns } from "../../hooks/useColumns";
@@ -143,29 +144,13 @@ function Kanban() {
 
   // --- render ---
   return (
-    <div
-      className="kanban-background"
-      style={{
-        height: "100%",
-        padding: "16px",
-      }}
-    >
+    <div className={style.kanbanBackground}>
       <DndContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            paddingBottom: "20px",
-            overflowX: "auto",
-            overflowY: "hidden",
-            width: "100%",
-            height: "100%",
-          }}
-        >
+        <div className={style.board}>
           <SortableContext
             items={columnIds}
             strategy={horizontalListSortingStrategy}
