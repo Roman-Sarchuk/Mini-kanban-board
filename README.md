@@ -6,6 +6,8 @@ A minimal Kanban board built with React.
 
 This project demonstrates state management, custom hooks, drag-and-drop interactions, and persistent storage using localStorage.
 
+URL: https://vercel.com/roman-sarchuks-projects/mini-kanban-board
+
 > # 🚀 Features
 > * 3 columns: To Do, In Progress, Done
 > * CUID operations (Create, Update, Delete) implemented via a custom hook
