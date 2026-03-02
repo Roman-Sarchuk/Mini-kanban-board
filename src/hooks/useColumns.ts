@@ -38,7 +38,6 @@ export function useColumns() {
   };
 
   const updateColumn = (id: string, updates: Partial<Omit<Column, "id">>) => {
-    return
     setColumns((prev) => {
       const existingColumn = prev.find((column) => column.id === id);
       if (!existingColumn) return prev;
