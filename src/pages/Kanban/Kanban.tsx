@@ -1,4 +1,5 @@
 import {
+  closestCorners,
   DndContext,
   DragOverlay,
   type DragEndEvent,
