@@ -1,9 +1,10 @@
+[![CI/CD Pipeline](https://github.com/Roman-Sarchuk/Mini-kanban-board/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Roman-Sarchuk/Mini-kanban-board/actions/workflows/ci-cd.yml)
+
 # Mini Kanban Board 
 
 A minimal Kanban board built with React.
 
 This project demonstrates state management, custom hooks, drag-and-drop interactions, and persistent storage using localStorage.
-
 
 > # 🚀 Features
 > * 3 columns: To Do, In Progress, Done
