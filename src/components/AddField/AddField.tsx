@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import styles from "./AddField.module.css";
 import PlusIcon from "../../icons/PlusIcon";
 
 interface AddFieldProps {
@@ -25,7 +26,7 @@ function AddField({ title, onAdd }: AddFieldProps) {
   };
 
   return (
-    <div>
+    <div className={styles.addField}>
       <input
         type="text"
         value={value}

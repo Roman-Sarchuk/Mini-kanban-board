@@ -1,5 +1,4 @@
 import {
-  closestCenter,
   DndContext,
   DragOverlay,
   type DragEndEvent,
@@ -13,6 +12,7 @@ import {
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 
+import style from "./Kanban.module.css";
 import AddField from "../../components/AddField/AddField";
 import Column from "../../components/Column/Column";
 import { useColumns } from "../../hooks/useColumns";
@@ -143,47 +143,45 @@ function Kanban() {
 
   // --- render ---
   return (
-    <div
-      className="kanban-background"
-      style={{
-        height: "100%",
-        padding: "16px",
-      }}
-    >
+    <div className={style.kanbanBackground}>
       <DndContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            paddingBottom: "20px",
-            overflowX: "auto",
-            overflowY: "hidden",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <SortableContext
-            items={columnIds}
-            strategy={horizontalListSortingStrategy}
+        <div className={style.boardContainer}>
+          <div className={style.board}>
+            <SortableContext
+              items={columnIds}
+              strategy={horizontalListSortingStrategy}
+            >
+              {columns.map((column) => (
+                <Column
+                  key={column.id}
+                  columnData={column}
+                  columnTasks={tasksByColumn[column.id] || []}
+                  onDeleteColumn={onDeleteColumn}
+                  onUpdateColumn={updateColumn}
+                  onAddTask={addTask}
+                  onDeleteTask={deleteTask}
+                  onUpdateTask={updateTask}
+                />
+              ))}
+            </SortableContext>
+            <div data-testid="add-column-field">
+              <AddField title="Enter column title" onAdd={addColumn} />
+            </div>
+          </div>
+          <span
+            style={{
+              display: "block",
+              color: "white",
+              fontSize: "14px",
+              opacity: 0.8,
+            }}
           >
-            {columns.map((column) => (
-              <Column
-                key={column.id}
-                columnData={column}
-                columnTasks={tasksByColumn[column.id] || []}
-                onDeleteColumn={onDeleteColumn}
-                onUpdateColumn={updateColumn}
-                onAddTask={addTask}
-                onDeleteTask={deleteTask}
-                onUpdateTask={updateTask}
-              />
-            ))}
-          </SortableContext>
-          <AddField title="Enter column title" onAdd={addColumn} />
+            App mode: {import.meta.env.VITE_APP_STATUS}
+          </span>
         </div>
 
         {createPortal(
@@ -197,7 +195,7 @@ function Kanban() {
                 onAddTask={addTask}
                 onDeleteTask={deleteTask}
                 onUpdateTask={updateTask}
-                isStatic
+                isDragOverlay={true}
               />
             ) : activeTask ? (
               <Card
