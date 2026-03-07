@@ -1,7 +1,7 @@
 .kanbanBackground {
   height: 100%;
   padding: 30px;
-  overflow-x: auto; /* ← тільки тут */
+  overflow-x: auto;
   background-image: url("../../assets/room10.png");
   background-size: cover;
 }
@@ -12,22 +12,20 @@
 
 .boardContainer {
   height: 100%;
-  display: inline-block; /* 🔥 важливо */
+  display: inline-block;
   min-height: 100%;
   min-width: 100%;
   padding: 15px;
-  /* background-image: url("../../assets/board4.jpg"); */
+
   background-repeat: repeat;
-  background-size: contain;     /* без cover */
+  background-size: contain;    
   
-  border: 10px solid transparent; /* обовʼязково transparent */
+  border: 10px solid transparent;
   border-radius: 12px;
 
   background:
-    /* внутрішня текстура */
     url("../../assets/board2.jpg") repeat,
     
-    /* градієнт рамки */
     linear-gradient(
       145deg,
       #6d511d,

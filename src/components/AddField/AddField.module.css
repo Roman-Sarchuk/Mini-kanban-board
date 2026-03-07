@@ -18,7 +18,7 @@
   padding-inline: 8px;
 
   background-image: url("../../assets/stiker2.png");
-  background-size: 100% 100%; /* 🔥 розтягує по картці */
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
 }
