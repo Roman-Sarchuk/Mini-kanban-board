@@ -6,9 +6,10 @@ import PlusIcon from "../../icons/PlusIcon";
 interface AddFieldProps {
   title: string;
   onAdd: (title: string) => void;
+  isTextArea?: boolean;
 }
 
-function AddField({ title, onAdd }: AddFieldProps) {
+function AddField({ title, onAdd, isTextArea }: AddFieldProps) {
   const [value, setValue] = useState("");
 
   const handleAdd = () => {
@@ -19,21 +20,36 @@ function AddField({ title, onAdd }: AddFieldProps) {
     setValue("");
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !isTextArea) {
+    handleAdd();
+    }
+
+    if (e.key === "Enter" && isTextArea && e.ctrlKey) {
       handleAdd();
     }
   };
 
   return (
     <div className={styles.addField}>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={title}
-        onKeyDown={handleKeyDown}
-      />
+      {isTextArea ? (
+        <textarea
+          data-testid="add-field-enter-area"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={title}
+          onKeyDown={handleKeyDown}
+        />
+      ) : (
+        <input
+          data-testid="add-field-enter-area"
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={title}
+          onKeyDown={handleKeyDown}
+        />
+      )}
       <button
         onClick={handleAdd}
         style={{
