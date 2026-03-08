@@ -75,6 +75,10 @@ function Kanban() {
   );
 
   const onDragStart = (event: DragStartEvent) => {
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(50);
+    }
+    
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.columnData);
       return;
