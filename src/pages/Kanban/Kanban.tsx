@@ -1,5 +1,9 @@
 import {
   DndContext,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
   DragOverlay,
   type DragEndEvent,
   type DragOverEvent,
@@ -59,6 +63,16 @@ function Kanban() {
 
   const [activeColumn, setActiveColumn] = useState<ColumnType | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    }),
+  );
 
   const onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
@@ -145,6 +159,7 @@ function Kanban() {
   return (
     <div className={style.kanbanBackground}>
       <DndContext
+        sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
