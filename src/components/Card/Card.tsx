@@ -63,6 +63,7 @@ export default function Card({ task, onDelete, onUpdate }: CardProps) {
           startValue={task.title}
           onUpdate={(newTitle) => onUpdate(task.id, { title: newTitle })}
           onIsEditingChange={(isEditing) => setIsEditingText(isEditing)}
+          isTextArea={true}
         />
       </div>
 
