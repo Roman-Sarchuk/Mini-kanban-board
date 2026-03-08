@@ -87,7 +87,7 @@ function Column({
         }}
       >
         {/* --- header --- */}
-        <div className={`${style.colunHeader} ${style.dashedBorder}`}>
+        <div className={style.colunHeader}>
           {/* title */}
           <div
             className={style.columnTitleContainer}
@@ -117,7 +117,7 @@ function Column({
         </div>
 
         {/* --- tasks container --- */}
-        <div className={`${style.taskContainer} ${style.dashedBorder}`}>
+        <div className={style.taskContainer}>
           {!isDragOverlay ? (
             <SortableContext
               items={taskIds}
@@ -146,12 +146,13 @@ function Column({
 
         {/* --- footer --- */}
         <div
-          className={`${style.columnFooter} ${style.dashedBorder}`}
+          className={style.columnFooter}
           data-testid="add-task-field"
         >
           <AddField
             title="Enter task title"
             onAdd={(title) => onAddTask(columnData.id, title)}
+            isTextArea={true}
           />
         </div>
       </div>

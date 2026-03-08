@@ -1,0 +1,17 @@
+.fieldContainer {
+  width: 100%;
+}
+
+.fieldContainer textarea {
+  field-sizing: content;
+  width: 100%;
+  resize: none;
+}
+
+.fieldContainer input {
+  width: 100%;
+}
+
+.fieldText {
+  width: 100%;
+}
