@@ -1,6 +1,11 @@
 import {
   DndContext,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
   DragOverlay,
+  KeyboardSensor,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
@@ -8,6 +13,7 @@ import {
 import {
   horizontalListSortingStrategy,
   SortableContext,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
@@ -60,7 +66,28 @@ function Kanban() {
   const [activeColumn, setActiveColumn] = useState<ColumnType | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   const onDragStart = (event: DragStartEvent) => {
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(50);
+    }
+
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.columnData);
       return;
@@ -145,6 +172,7 @@ function Kanban() {
   return (
     <div className={style.kanbanBackground}>
       <DndContext
+        sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
