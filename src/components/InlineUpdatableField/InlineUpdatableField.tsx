@@ -79,9 +79,17 @@ export default function InlineUpdatableField({
     setIsEditing(true);
   };
 
+  const handleClick = () => {
+  if (!isEditing) setIsEditing(true);
+};
+
   // --- render ---
   return (
-    <div onContextMenu={handleRightClick} className={styles.fieldContainer}>
+    <div
+      onContextMenu={handleRightClick}
+      onClick={handleClick}
+      className={styles.fieldContainer}
+    >
       {isEditing ? (
         isTextArea ? (
           <textarea

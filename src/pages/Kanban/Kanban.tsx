@@ -5,6 +5,7 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
+  KeyboardSensor,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
@@ -12,6 +13,7 @@ import {
 import {
   horizontalListSortingStrategy,
   SortableContext,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
@@ -65,12 +67,19 @@ function Kanban() {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
-    useSensor(MouseSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
-        tolerance: 5,
+        delay: 200,
+        tolerance: 6,
       },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
 
@@ -78,7 +87,7 @@ function Kanban() {
     if (window.navigator.vibrate) {
       window.navigator.vibrate(50);
     }
-    
+
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.columnData);
       return;
