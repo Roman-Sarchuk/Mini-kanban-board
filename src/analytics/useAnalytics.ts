@@ -6,6 +6,7 @@ export function useAnalytics() {
 
   const track = (event: EventName, props?: Record<string, unknown>) => {
     posthog?.capture(event, props)
+    console.log('Tracking event', event, props, posthog);
   }
 
   return { track }
