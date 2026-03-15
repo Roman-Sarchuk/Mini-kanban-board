@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { useFeatureFlagEnabled } from "posthog-js/react";
 
 import style from "./Kanban.module.css";
 import AddField from "../../components/AddField/AddField";
@@ -27,6 +28,10 @@ import type { Column as ColumnType, Task } from "../../types";
 import Card from "../../components/Card/Card";
 
 function Kanban() {
+  // --- analytics ---
+  const isFlagShowErrorButtonEnabled =
+    useFeatureFlagEnabled("show-error-button");
+
   // --- CRUD for columns and tasks ---
   const { columns, addColumn, updateColumn, deleteColumn, moveColumn } =
     useColumns();
@@ -200,16 +205,22 @@ function Kanban() {
               <AddField title="Enter column title" onAdd={addColumn} />
             </div>
           </div>
-          <span
-            style={{
-              display: "block",
-              color: "white",
-              fontSize: "14px",
-              opacity: 0.8,
-            }}
-          >
-            App mode: {import.meta.env.VITE_APP_STATUS}
-          </span>
+
+          <div className={style.footerComponentContainer}>
+            <span className={style.appModeText}>
+              App mode: {import.meta.env.VITE_APP_STATUS}
+            </span>
+            {isFlagShowErrorButtonEnabled === true && (
+              <span
+                className={style.raiseErrorButton}
+                onClick={() => {
+                  throw new Error("Test error from 'Raise error' button");
+                }}
+              >
+                Raise error
+              </span>
+            )}
+          </div>
         </div>
 
         {createPortal(

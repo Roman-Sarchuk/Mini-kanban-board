@@ -7,7 +7,7 @@
 }
 
 .kanbanBackground {
-  scrollbar-color: #72500c rgba(0,0,0,0.1);
+  scrollbar-color: #72500c rgba(0, 0, 0, 0.1);
 }
 
 .boardContainer {
@@ -18,20 +18,14 @@
   padding: 15px;
 
   background-repeat: repeat;
-  background-size: contain;    
-  
+  background-size: contain;
+
   border: 10px solid transparent;
   border-radius: 12px;
 
   background:
     url("../../assets/board2.jpg") repeat,
-    
-    linear-gradient(
-      145deg,
-      #6d511d,
-      #72500c,
-      #815504
-    );
+    linear-gradient(145deg, #6d511d, #72500c, #815504);
 
   background-origin: border-box;
   background-clip: padding-box, border-box;
@@ -44,4 +38,27 @@
   gap: 16px;
 }
 
+.footerComponentContainer {
+  display: flex;
+  gap: 16px;
+}
 
+.appModeText {
+  display: block;
+  color: white;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.raiseErrorButton {
+  display: block;
+  color: red;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.raiseErrorButton:hover {
+  opacity: 1;
+  text-decoration: underline;
+  cursor: pointer;
+}
