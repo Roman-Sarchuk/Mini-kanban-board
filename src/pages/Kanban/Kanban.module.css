@@ -49,16 +49,3 @@
   font-size: 14px;
   opacity: 0.8;
 }
-
-.raiseErrorButton {
-  display: block;
-  color: red;
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.raiseErrorButton:hover {
-  opacity: 1;
-  text-decoration: underline;
-  cursor: pointer;
-}

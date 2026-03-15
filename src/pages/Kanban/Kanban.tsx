@@ -26,6 +26,7 @@ import { useColumns } from "../../hooks/useColumns";
 import { useTasks } from "../../hooks/useTasks";
 import type { Column as ColumnType, Task } from "../../types";
 import Card from "../../components/Card/Card";
+import ErrorTestButton from "../../components/ErrorTestButton/ErrorTestButton";
 
 function Kanban() {
   // --- analytics ---
@@ -211,14 +212,7 @@ function Kanban() {
               App mode: {import.meta.env.VITE_APP_STATUS}
             </span>
             {isFlagShowErrorButtonEnabled === true && (
-              <span
-                className={style.raiseErrorButton}
-                onClick={() => {
-                  throw new Error("Test error from 'Raise error' button");
-                }}
-              >
-                Raise error
-              </span>
+              <ErrorTestButton />
             )}
           </div>
         </div>
