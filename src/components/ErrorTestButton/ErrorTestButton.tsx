@@ -1,4 +1,4 @@
-import style from "./Kanban.module.scss";
+import style from "./ErrorTestButton.module.css";
 
 function ErrorTestButton() {
   const breakTheWorld = () => {
