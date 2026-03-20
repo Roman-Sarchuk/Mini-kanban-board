@@ -2,7 +2,7 @@
 [![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vercel](https://img.shields.io/badge/Vercel-Deployment-000000?logo=vercel&logoColor=white)](https://mini-kanban-board-kohl.vercel.app/)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployment-111111?logo=vercel&logoColor=white)](https://mini-kanban-board-kohl.vercel.app/)
 
 
 # [![Typing SVG](https://readme-typing-svg.demolab.com?font=Permanent+Marker&size=40&duration=4000&pause=2000&color=D9A518&vCenter=true&width=350&height=70&lines=Mini-Kanban)](https://git.io/typing-svg)
