@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Task } from "../types";
+import { useAnalytics } from "../analytics/useAnalytics";
+import { EVENTS } from "../analytics/events";
 
 const STORAGE_KEY = "my-kanban-tasks";
 
 export function useTasks() {
+  const { track } = useAnalytics();
+
   const [tasks, setTasks] = useState<Task[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return [];
@@ -34,17 +38,19 @@ export function useTasks() {
         title,
       };
 
+      track(EVENTS.TASK_CREATED, { taskId: newTask.id, columnId, title });
+
       return [...prev, newTask];
     });
   };
 
-  const updateTask = (
-    id: string,
-    updates: Partial<Omit<Task, "id">>,
-  ) => {
+  const updateTask = (id: string, updates: Partial<Omit<Task, "id">>) => {
     setTasks((prev) => {
       const existingTask = prev.find((task) => task.id === id);
       if (!existingTask) return prev;
+
+      if (updates.title)
+        track(EVENTS.TASK_UPDATED, { taskId: id, title: updates.title });
 
       return prev.map((task) =>
         task.id === id ? { ...task, ...updates } : task,
@@ -56,6 +62,8 @@ export function useTasks() {
     setTasks((prev) => {
       const taskToDelete = prev.find((t) => t.id === id);
       if (!taskToDelete) return prev;
+
+      track(EVENTS.TASK_DELETED, { taskId: id });
 
       return prev.filter((t) => t.id !== id);
     });
@@ -72,6 +80,13 @@ export function useTasks() {
       const updated = [...prev];
       const [moved] = updated.splice(currentIndex, 1);
       updated.splice(overIndex, 0, { ...moved, columnId: newColumnId });
+
+      track(EVENTS.TASK_MOVED, {
+        taskId: activeId,
+        columnId: newColumnId,
+        fromIndex: currentIndex,
+        toIndex: overIndex,
+      });
 
       return updated;
     });

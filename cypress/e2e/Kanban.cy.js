@@ -5,7 +5,7 @@ describe("Kanban Board E2E", () => {
   });
 
   it("add and delete column", () => {
-    cy.get('[data-testid="add-column-field"]').find('input').type("New Column");
+    cy.get('[data-testid="add-column-field"]').find('add-field-enter-area').type("New Column");
     cy.get('[data-testid="add-column-field"]').find('button').click();
     cy.contains("New Column").should("exist");
 
@@ -17,13 +17,13 @@ describe("Kanban Board E2E", () => {
   });
 
   it("add and delete task in a column", () => {
-    cy.get('[data-testid="add-column-field"]').find('input').type("Test Default Column");
+    cy.get('[data-testid="add-column-field"]').find('add-field-enter-area').type("Test Default Column");
     cy.get('[data-testid="add-column-field"]').find('button').click();
 
     cy.contains("Test Default Column")
       .parents('[data-testid="column"]')
       .within(() => {
-        cy.get('[data-testid="add-task-field"]').find('input').type("New Task");
+        cy.get('[data-testid="add-task-field"]').find('add-field-enter-area').type("New Task");
         cy.get('[data-testid="add-task-field"]').find('button').click();
         cy.contains("New Task").should("exist");
 
@@ -36,13 +36,13 @@ describe("Kanban Board E2E", () => {
   });
 
   it("preserves columns and tasks after reload", () => {
-    cy.get('[data-testid="add-column-field"]').find('input').type("Test Default Column");
+    cy.get('[data-testid="add-column-field"]').find('add-field-enter-area').type("Test Default Column");
     cy.get('[data-testid="add-column-field"]').find('button').click();
     
     cy.contains("Test Default Column")
       .parents('[data-testid="column"]')
       .within(() => {
-        cy.get('[data-testid="add-task-field"]').find('input').type("Persistent Task");
+        cy.get('[data-testid="add-task-field"]').find('add-field-enter-area').type("Persistent Task");
         cy.get('[data-testid="add-task-field"]').find('button').click();
       });
 

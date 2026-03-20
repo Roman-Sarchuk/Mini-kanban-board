@@ -1,20 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 
+import styles from "./InlineUpdatableField.module.css";
+
 interface InlineUpdatableFieldProps {
   startValue: string;
   onUpdate: (value: string) => void;
   onIsEditingChange?: (isEditing: boolean) => void;
+  isTextArea?: boolean;
 }
 
 export default function InlineUpdatableField({
   startValue,
   onUpdate,
   onIsEditingChange,
+  isTextArea,
 }: InlineUpdatableFieldProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(startValue);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!isEditing) {
@@ -26,8 +31,13 @@ export default function InlineUpdatableField({
     onIsEditingChange?.(isEditing);
 
     if (isEditing) {
-      inputRef.current?.focus();
-      inputRef.current?.select();
+      if (isTextArea) {
+        textAreaRef.current?.focus();
+        textAreaRef.current?.select();
+      } else {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
     }
   }, [isEditing, onIsEditingChange]);
 
@@ -48,8 +58,14 @@ export default function InlineUpdatableField({
     setIsEditing(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    if (e.key === "Enter" && !isTextArea) {
+      handleSave();
+    }
+
+    if (e.key === "Enter" && isTextArea && e.ctrlKey) {
       handleSave();
     }
 
@@ -63,24 +79,37 @@ export default function InlineUpdatableField({
     setIsEditing(true);
   };
 
+  const handleClick = () => {
+  if (!isEditing) setIsEditing(true);
+};
+
+  // --- render ---
   return (
     <div
       onContextMenu={handleRightClick}
-      style={{ width: "100%" }}
+      onClick={handleClick}
+      className={styles.fieldContainer}
     >
       {isEditing ? (
-        <input
-          ref={inputRef}
-          value={editedValue}
-          onChange={(e) => setEditedValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onBlur={handleCancel}
-          style={{ width: "100%" }}
-        />
+        isTextArea ? (
+          <textarea
+            ref={textAreaRef}
+            value={editedValue}
+            onChange={(e) => setEditedValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleCancel}
+          />
+        ) : (
+          <input
+            ref={inputRef}
+            value={editedValue}
+            onChange={(e) => setEditedValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleCancel}
+          />
+        )
       ) : (
-        <div style={{ width: "100%" }}>
-          {startValue}
-        </div>
+        <div className={styles.fieldText}>{startValue}</div>
       )}
     </div>
   );

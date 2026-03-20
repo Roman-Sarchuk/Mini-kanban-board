@@ -1,38 +1,31 @@
 .kanbanBackground {
   height: 100%;
   padding: 30px;
-  overflow-x: auto; /* ← тільки тут */
+  overflow-x: auto;
   background-image: url("../../assets/room10.png");
   background-size: cover;
 }
 
 .kanbanBackground {
-  scrollbar-color: #72500c rgba(0,0,0,0.1);
+  scrollbar-color: #72500c rgba(0, 0, 0, 0.1);
 }
 
 .boardContainer {
   height: 100%;
-  display: inline-block; /* 🔥 важливо */
+  display: inline-block;
   min-height: 100%;
+  min-width: 100%;
   padding: 15px;
-  /* background-image: url("../../assets/board4.jpg"); */
+
   background-repeat: repeat;
-  background-size: contain;     /* без cover */
-  
-  border: 10px solid transparent; /* обовʼязково transparent */
+  background-size: contain;
+
+  border: 10px solid transparent;
   border-radius: 12px;
 
   background:
-    /* внутрішня текстура */
     url("../../assets/board2.jpg") repeat,
-    
-    /* градієнт рамки */
-    linear-gradient(
-      145deg,
-      #6d511d,
-      #72500c,
-      #815504
-    );
+    linear-gradient(145deg, #6d511d, #72500c, #815504);
 
   background-origin: border-box;
   background-clip: padding-box, border-box;
@@ -45,4 +38,14 @@
   gap: 16px;
 }
 
+.footerComponentContainer {
+  display: flex;
+  gap: 16px;
+}
 
+.appModeText {
+  display: block;
+  color: white;
+  font-size: 14px;
+  opacity: 0.8;
+}

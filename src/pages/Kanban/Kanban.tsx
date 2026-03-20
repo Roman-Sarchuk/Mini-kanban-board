@@ -1,6 +1,11 @@
 import {
   DndContext,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
   DragOverlay,
+  KeyboardSensor,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
@@ -8,9 +13,11 @@ import {
 import {
   horizontalListSortingStrategy,
   SortableContext,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { useFeatureFlagEnabled } from "posthog-js/react";
 
 import style from "./Kanban.module.css";
 import AddField from "../../components/AddField/AddField";
@@ -19,8 +26,13 @@ import { useColumns } from "../../hooks/useColumns";
 import { useTasks } from "../../hooks/useTasks";
 import type { Column as ColumnType, Task } from "../../types";
 import Card from "../../components/Card/Card";
+import ErrorTestButton from "../../components/ErrorTestButton/ErrorTestButton";
 
 function Kanban() {
+  // --- analytics ---
+  const isFlagShowErrorButtonEnabled =
+    useFeatureFlagEnabled("show-error-button");
+
   // --- CRUD for columns and tasks ---
   const { columns, addColumn, updateColumn, deleteColumn, moveColumn } =
     useColumns();
@@ -60,7 +72,28 @@ function Kanban() {
   const [activeColumn, setActiveColumn] = useState<ColumnType | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   const onDragStart = (event: DragStartEvent) => {
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(50);
+    }
+
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.columnData);
       return;
@@ -145,6 +178,7 @@ function Kanban() {
   return (
     <div className={style.kanbanBackground}>
       <DndContext
+        sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
@@ -172,16 +206,15 @@ function Kanban() {
               <AddField title="Enter column title" onAdd={addColumn} />
             </div>
           </div>
-          <span
-            style={{
-              display: "block",
-              color: "white",
-              fontSize: "14px",
-              opacity: 0.8,
-            }}
-          >
-            App mode: {import.meta.env.VITE_APP_STATUS}
-          </span>
+
+          <div className={style.footerComponentContainer}>
+            <span className={style.appModeText}>
+              App mode: {import.meta.env.VITE_APP_STATUS}
+            </span>
+            {isFlagShowErrorButtonEnabled === true && (
+              <ErrorTestButton />
+            )}
+          </div>
         </div>
 
         {createPortal(

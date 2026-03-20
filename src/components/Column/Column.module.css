@@ -40,11 +40,6 @@
   padding: 5px;
 }
 
-.dashedBorder {
-  /* border: 2px dashed #25639a; */
-  /* border-radius: 3px; */
-}
-
 .columnTitleContainer {
   display: flex;
   gap: 8px;
