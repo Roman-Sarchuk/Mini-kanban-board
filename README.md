@@ -3,35 +3,60 @@
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-# Mini-Kanban
+# [![Typing SVG](https://readme-typing-svg.demolab.com?font=Permanent+Marker&size=40&duration=4000&pause=2000&color=D9A518&vCenter=true&width=350&height=70&lines=Mini-Kanban)](https://git.io/typing-svg)
 
-A lightweight, drag-and-drop Kanban board application for task management.
+A lightweight, drag-and-drop Kanban board built with modern React patterns. Created as a portfolio project to showcase frontend engineering skills.
 
 This project demonstrates:
-- complex state management with custom hooks
-- drag-and-drop interactions using @dnd-kit
+- complex state management using custom hooks
+- drag-and-drop interactions with `@dnd-kit`
 - scalable component architecture
 - testing strategy (unit + E2E)
+- responsive UI design
 
-Live demo: https://mini-kanban-board-kohl.vercel.app/
+---
 
-<img width="1898" height="961" alt="image" src="https://github.com/user-attachments/assets/0d78e15c-8931-4322-9581-3bb8cf524e4b" />
+## 🚀 Live demo
 
-## 2. Features
+👉 https://mini-kanban-board-kohl.vercel.app/
+
+<img src="https://github.com/user-attachments/assets/0d78e15c-8931-4322-9581-3bb8cf524e4b" width="100%" />
+
+---
+
+## 🧠 Why I built this
+
+This project was created as a portfolio piece to practice and demonstrate:
+
+- advanced React patterns (hooks, composition)
+- drag-and-drop UX
+- client-side persistence strategies
+- testing approaches (Vitest + Cypress)
+- building scalable and maintainable frontend architecture
+
+---
+
+## ✨ Features
+
 ### Core functionality
-- Drag-and-drop tasks across columns (`@dnd-kit`)
+- Drag-and-drop task movement across columns (`@dnd-kit`)
 - Column management (create, rename, reorder, delete)
 - Task CRUD with inline editing
-### UX & persistence
-- Real-time grouping by column
-- Local storage persistence
-- Responsive layout (mobile → desktop)
-### Quality & tooling
-- Unit + component tests (Vitest)
-- E2E tests (Cypress)
-- Optional analytics (PostHog, Sentry)
 
-## 3. Tech Stack
+### UX & persistence
+- Real-time task grouping by column
+- Local storage persistence
+- Fully responsive layout (mobile, tablet, desktop)
+
+### Quality & tooling
+- Unit & component testing (Vitest)
+- End-to-end testing (Cypress)
+- Code quality via ESLint
+- Analytics/monitoring (PostHog, Sentry)
+
+---
+
+## 🛠 Tech Stack
 
 ![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
@@ -47,7 +72,19 @@ Live demo: https://mini-kanban-board-kohl.vercel.app/
 ![PostHog](https://img.shields.io/badge/PostHog-Analytics-000000)
 ![Sentry](https://img.shields.io/badge/Sentry-Monitoring-362D59?logo=sentry&logoColor=white)
 
-## 4. Installation & Setup
+---
+
+## 🏗 Architecture
+
+- State is managed via custom hooks (`useColumns`, `useTasks`)
+- Components are modular and reusable
+- Drag-and-drop is implemented with controlled state via `@dnd-kit`
+- Local storage is used for persistence (no backend)
+- Clear separation between UI, logic, and types
+
+---
+
+## ⚙️ Installation & Setup
 
 ### Prerequisites
 
@@ -57,27 +94,29 @@ Live demo: https://mini-kanban-board-kohl.vercel.app/
 ### Run locally
 
 ```bash
-git clone https://github.com/your-username/Mini-kanban-board.git
-cd mini-kanban-board
+git clone https://github.com/Roman-Sarchuk/Mini-kanban-board.git
+cd Mini-kanban-board
 npm install
 npm run dev
 ```
 
-App runs at: `http://localhost:5173`
+---
 
-### Useful scripts
+## 🧪 Testing
+
+- Unit & component tests with Vitest
+- End-to-end testing with Cypress
+
+Run tests:
 
 ```bash
-npm run build          # Production build
-npm run preview        # Preview production build
-npm run lint           # Lint codebase
-npm run test           # Run unit/component tests (watch)
-npm run test:coverage  # Run tests with coverage
-npm run cypress:open   # Open Cypress UI
-npm run cypress:run    # Run Cypress headless
+npm run test
+npm run cypress:run
 ```
 
-## 5. Project Structure
+---
+
+## 5. 📂 Project Structure
 
 ```text
 mini-kanban/
@@ -96,6 +135,15 @@ mini-kanban/
 ├─ cypress.config.ts
 └─ package.json
 ```
+
+---
+
+## 🗺 Roadmap
+- Task details (description, priority, due date)
+- Filtering, search, and sorting
+- Dark mode / theming
+- Backend integration (Supabase / Firebase)
+- Real-time collaboration
 
 ---
 
