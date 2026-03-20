@@ -1,4 +1,4 @@
-[![CI/CD Pipeline](https://img.shields.io/github/actions/workflow/status/Roman-Sarchuk/Mini-kanban-board/ci-cd.yml?branch=main&label=CI%2FCD)](https://github.com/Roman-Sarchuk/Mini-kanban-board/actions/workflows/ci-cd.yml)
+[![CI/CD Pipeline](https://github.com/Roman-Sarchuk/Mini-kanban-board/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Roman-Sarchuk/Mini-kanban-board/actions/workflows/ci-cd.yml)
 [![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
